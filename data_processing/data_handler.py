@@ -33,7 +33,7 @@ def extract_team_names(fixtures):
         
 
         
-def process_fixture_events(api_client, fixture_id, home_team_id, away_team_id):
+def process_card_events(api_client, fixture_id, home_team_id, away_team_id):
 
     response = api_client.get(f"fixtures/events?fixture={fixture_id}")
     events = response.get('response', [])
@@ -57,6 +57,40 @@ def process_fixture_events(api_client, fixture_id, home_team_id, away_team_id):
                     away_red_cards += 1
 
     return home_yellow_cards, home_red_cards, away_yellow_cards, away_red_cards
+
+
+def process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id):
+    response = api_client.get(f"fixtures/events?fixture={fixture_id}")
+    events = response.get('response', [])
+    
+    home_goals = {}
+    away_goals = {}
+    home_hat_tricks = 0
+    away_hat_tricks = 0
+    
+    for event in events:
+        if event['type'] == 'Goal' and event['detail'] in ['Normal Goal', 'Penalty']:
+            player_id = event['player']['id']
+            if event['team']['id'] == home_team_id:
+                if player_id in home_goals:
+                    home_goals[player_id] += 1
+                else:
+                    home_goals[player_id] = 1
+            elif event['team']['id'] == away_team_id:
+                if player_id in away_goals:
+                    away_goals[player_id] += 1
+                else:
+                    away_goals[player_id] = 1
+    
+    for goals in home_goals.values():
+        if goals >= 3:
+            home_hat_tricks += 1
+    
+    for goals in away_goals.values():
+        if goals >= 3:
+            away_hat_tricks += 1
+
+    return home_hat_tricks, away_hat_tricks
 
         
         
@@ -99,8 +133,12 @@ def process_group_fixtures(api_client, fixtures, group_name):
                     result = f"{away_team} Victory"
                 
                 # Fetch the fixture events for cards
-                home_yellow_cards, home_red_cards, away_yellow_cards, away_red_cards = process_fixture_events(api_client, fixture_id, home_team_id, away_team_id)
+                home_yellow_cards, home_red_cards, away_yellow_cards, away_red_cards = process_card_events(api_client, fixture_id, home_team_id, away_team_id)
                 
+                # Fetch the hat trick events
+                home_hat_tricks, away_hat_tricks = process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id)
+                
+
                 fixtures_data.append([
                     fixture_id,
                     home_team,
@@ -113,10 +151,12 @@ def process_group_fixtures(api_client, fixtures, group_name):
                     home_yellow_cards,
                     home_red_cards,
                     away_yellow_cards,
-                    away_red_cards
+                    away_red_cards,
+                    home_hat_tricks,
+                    away_hat_tricks
                 ])
     
-    columns = ["Fixture ID", "Home", "Away", "Result", "Home Goals Scored", "Home Goals Conceded", "Away Goals Scored", "Away Goals Conceded", "Home Yellow Cards", "Home Red Cards", "Away Yellow Cards", "Away Red Cards"]
+    columns = ["Fixture ID", "Home", "Away", "Result", "Home Goals Scored", "Home Goals Conceded", "Away Goals Scored", "Away Goals Conceded", "Home Yellow Cards", "Home Red Cards", "Away Yellow Cards", "Away Red Cards", "Home Hat Tricks", "Away Hat Tricks"]
     if fixtures_data:
         return pd.DataFrame(fixtures_data, columns=columns)
     else:
