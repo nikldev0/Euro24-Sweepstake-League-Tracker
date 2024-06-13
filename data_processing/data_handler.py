@@ -93,7 +93,24 @@ def process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id)
     return home_hat_tricks, away_hat_tricks
 
         
-        
+def process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id):
+    response = api_client.get(f"fixtures/events?fixture={fixture_id}")
+    events = response.get('response', [])
+    
+    home_own_goals = 0
+    away_own_goals = 0
+    
+    for event in events:
+        if event['type'] == 'Goal' and event['detail'] == 'Own Goal':
+            if event['team']['id'] == home_team_id:
+                home_own_goals += 1
+            elif event['team']['id'] == away_team_id:
+                away_own_goals += 1
+
+    return home_own_goals, away_own_goals
+
+
+
 def process_group_fixtures(api_client, fixtures, group_name):
     fixtures_data = []
     
@@ -138,6 +155,9 @@ def process_group_fixtures(api_client, fixtures, group_name):
                 # Fetch the hat trick events
                 home_hat_tricks, away_hat_tricks = process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id)
                 
+                # Fetch the own goal events
+                home_own_goals, away_own_goals = process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id)
+                
 
                 fixtures_data.append([
                     fixture_id,
@@ -153,10 +173,12 @@ def process_group_fixtures(api_client, fixtures, group_name):
                     away_yellow_cards,
                     away_red_cards,
                     home_hat_tricks,
-                    away_hat_tricks
+                    away_hat_tricks,
+                    home_own_goals,
+                    away_own_goals
                 ])
     
-    columns = ["Fixture ID", "Home", "Away", "Result", "Home Goals Scored", "Home Goals Conceded", "Away Goals Scored", "Away Goals Conceded", "Home Yellow Cards", "Home Red Cards", "Away Yellow Cards", "Away Red Cards", "Home Hat Tricks", "Away Hat Tricks"]
+    columns = ["Fixture ID", "Home", "Away", "Result", "Home Goals Scored", "Home Goals Conceded", "Away Goals Scored", "Away Goals Conceded", "Home Yellow Cards", "Home Red Cards", "Away Yellow Cards", "Away Red Cards", "Home Hat Tricks", "Away Hat Tricks", "Home Own Goals", "Away Own Goals"]
     if fixtures_data:
         return pd.DataFrame(fixtures_data, columns=columns)
     else:
