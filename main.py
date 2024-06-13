@@ -37,8 +37,8 @@ def main():
         update_google_sheet(sheet, team_names_df)
 
         update_sheet_with_group_data(api_client, response, "Group A", "Group A")
-        # update_sheet_with_group_data(response, "Group B", "Group B")
-        # update_sheet_with_group_data(response, "Group C", "Group C")
+        update_sheet_with_group_data(api_client, response, "Group B", "Group B")
+        update_sheet_with_group_data(api_client, response, "Group C", "Group C")
         # update_sheet_with_group_data(response, "Group D", "Group D")
         # update_sheet_with_group_data(response, "Group E", "Group E")
         # update_sheet_with_group_data(response, "Group F", "Group F")
