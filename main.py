@@ -6,8 +6,8 @@ from google_sheets.google_sheets_client import initialize_google_sheets, update_
 import pandas as pd
 
 
-def update_sheet_with_group_data(response, group_name, sheet_name):
-    group_df = process_group_fixtures(response['response'], group_name)
+def update_sheet_with_group_data(api_client, response, group_name, sheet_name):
+    group_df = process_group_fixtures(api_client, response['response'], group_name)
     
     print(f"{sheet_name} Fixtures DataFrame:")
     print(group_df)
@@ -36,12 +36,12 @@ def main():
         # Update Google Sheet with DataFrame
         update_google_sheet(sheet, team_names_df)
 
-        update_sheet_with_group_data(response, "Group A", "Group A")
-        update_sheet_with_group_data(response, "Group B", "Group B")
-        update_sheet_with_group_data(response, "Group C", "Group C")
-        update_sheet_with_group_data(response, "Group D", "Group D")
-        update_sheet_with_group_data(response, "Group E", "Group E")
-        update_sheet_with_group_data(response, "Group F", "Group F")
+        update_sheet_with_group_data(api_client, response, "Group A", "Group A")
+        # update_sheet_with_group_data(response, "Group B", "Group B")
+        # update_sheet_with_group_data(response, "Group C", "Group C")
+        # update_sheet_with_group_data(response, "Group D", "Group D")
+        # update_sheet_with_group_data(response, "Group E", "Group E")
+        # update_sheet_with_group_data(response, "Group F", "Group F")
 
     except Exception as e:
         print(f"An error occurred: {e}")
