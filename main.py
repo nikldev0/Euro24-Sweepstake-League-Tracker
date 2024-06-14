@@ -21,7 +21,7 @@ def update_sheet_with_group_data(api_client, response, group_name, sheet_name):
 def main():
     api_client = ApiClient()
     try:
-        response = api_client.get("fixtures", params={"league": 4, "season": 2020})
+        response = api_client.get("fixtures", params={"league": 4, "season": 2024})
 
         # Extract team names and create a DataFrame
         team_names_df = extract_team_names(response['response'])
@@ -39,7 +39,7 @@ def main():
         update_sheet_with_group_data(api_client, response, "Group A", "Group A")
         update_sheet_with_group_data(api_client, response, "Group B", "Group B")
         update_sheet_with_group_data(api_client, response, "Group C", "Group C")
-        # update_sheet_with_group_data(response, "Group D", "Group D")
+        update_sheet_with_group_data(api_client, response, "Group D", "Group D")
         # update_sheet_with_group_data(response, "Group E", "Group E")
         # update_sheet_with_group_data(response, "Group F", "Group F")
 

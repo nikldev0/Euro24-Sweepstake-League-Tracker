@@ -60,6 +60,12 @@ def process_card_events(api_client, fixture_id, home_team_id, away_team_id):
 
 
 def process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id):
+    fixture_response = api_client.get(f"fixtures?id={fixture_id}")
+    fixture = fixture_response.get('response', [])[0]
+    
+    if fixture['fixture']['status']['long'] == "Not Started":
+        return 0, 0
+
     response = api_client.get(f"fixtures/events?fixture={fixture_id}")
     events = response.get('response', [])
     
@@ -92,8 +98,15 @@ def process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id)
 
     return home_hat_tricks, away_hat_tricks
 
+
         
 def process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id):
+    fixture_response = api_client.get(f"fixtures?id={fixture_id}")
+    fixture = fixture_response.get('response', [])[0]
+    
+    if fixture['fixture']['status']['long'] == "Not Started":
+        return 0, 0
+
     response = api_client.get(f"fixtures/events?fixture={fixture_id}")
     events = response.get('response', [])
     
@@ -103,12 +116,11 @@ def process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id):
     for event in events:
         if event['type'] == 'Goal' and event['detail'] == 'Own Goal':
             if event['team']['id'] == home_team_id:
-                home_own_goals += 1
-            elif event['team']['id'] == away_team_id:
                 away_own_goals += 1
+            elif event['team']['id'] == away_team_id:
+                home_own_goals += 1
 
     return home_own_goals, away_own_goals
-
 
 
 def process_group_fixtures(api_client, fixtures, group_name):
@@ -128,19 +140,11 @@ def process_group_fixtures(api_client, fixtures, group_name):
                     fixture_id,
                     home_team,
                     away_team,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
+                    "", "", "", "", "", "", "", "", "", "", "", "", ""
                 ])
             else:
-                home_goals = fixture['goals']['home']
-                away_goals = fixture['goals']['away']
+                home_goals = fixture['goals']['home'] if fixture['goals']['home'] is not None else 0
+                away_goals = fixture['goals']['away'] if fixture['goals']['away'] is not None else 0
                 
                 if fixture['teams']['home']['winner'] is None and fixture['teams']['away']['winner'] is None:
                     result = "Draw"
@@ -158,7 +162,6 @@ def process_group_fixtures(api_client, fixtures, group_name):
                 # Fetch the own goal events
                 home_own_goals, away_own_goals = process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id)
                 
-
                 fixtures_data.append([
                     fixture_id,
                     home_team,
@@ -179,10 +182,14 @@ def process_group_fixtures(api_client, fixtures, group_name):
                 ])
     
     columns = ["Fixture ID", "Home", "Away", "Result", "Home Goals Scored", "Home Goals Conceded", "Away Goals Scored", "Away Goals Conceded", "Home Yellow Cards", "Home Red Cards", "Away Yellow Cards", "Away Red Cards", "Home Hat Tricks", "Away Hat Tricks", "Home Own Goals", "Away Own Goals"]
-    if fixtures_data:
-        return pd.DataFrame(fixtures_data, columns=columns)
+    
+    df = pd.DataFrame(fixtures_data, columns=columns)
+    
+    # Replace NaN values with 0
+    df = df.fillna(0)
+    
+    if not df.empty:
+        return df
     else:
         print(f"No fixtures found for {group_name}")
         return pd.DataFrame(columns=columns)
-    
-
