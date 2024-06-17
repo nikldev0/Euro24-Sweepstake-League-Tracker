@@ -42,8 +42,8 @@ Team of the Tournament Selection: +2 points per player selected from your teams
 
 Fair Play:
 
-No Yellow Cards in a Match: +1 point
-No Red Cards in a Match: +2 points
+Yellow Card Awarded: -0.25 points
+Red Card Awarded: -1 points
 Fair Play Award for the Tournament: +5 points (if your team wins)
 
 Miscellaneous:
