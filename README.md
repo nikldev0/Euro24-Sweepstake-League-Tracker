@@ -1,75 +1,88 @@
 # Euro24-Sweepstake-League-Tracker
 
-Team Assignments:
+# Team Assignments
 
-12 participants
-Each participant is randomly assigned 2 teams out of the 24 total teams
+## Overview
 
-Scoring Criteria:
+- **Participants:** 12
+- **Assignment:** Each participant is randomly assigned 2 teams out of the 24 total teams.
 
-Group Stage Matches:
+# Scoring Criteria
 
-Win: +3 points
-Draw: +1 point
-Loss: 0 points
-Clean Sheet: +2 points
-Goal Scored: +1 point per goal
-Goals Conceded: -0.5 points per goal
+## Group Stage Matches
 
-Advancement:
+| Action         | Points                  |
+| -------------- | ----------------------- |
+| Win            | +3 points               |
+| Draw           | +1 point                |
+| Loss           | 0 points                |
+| Clean Sheet    | +2 points               |
+| Goal Scored    | +1 point per goal       |
+| Goals Conceded | -0.5 points per goal    |
 
-Advance from Group Stage: +5 points
-Reach Quarterfinals: +7 points
-Reach Semifinals: +10 points
-Reach Final: +15 points
-Win the Tournament: +25 points
+## Advancement
 
-Knockout Stage Matches:
+| Milestone                | Points        |
+| ------------------------ | ------------- |
+| Advance from Group Stage | +5 points     |
+| Reach Quarterfinals      | +7 points     |
+| Reach Semifinals         | +10 points    |
+| Reach Final              | +15 points    |
+| Win the Tournament       | +25 points    |
 
-Win: +5 points
-Draw: (Only in the context of extra time, where it proceeds to penalties): +2 points
-Win on Penalties: +3 points
-Clean Sheet: +3 points
-Goal Scored: +2 points per goal
-Goals Conceded: -1 point per goal
+## Knockout Stage Matches
 
-Player Achievements:
+| Action             | Points                           |
+| ------------------ | -------------------------------- |
+| Win                | +5 points                        |
+| Draw               | +2 points (extra time)           |
+| Win on Penalties   | +3 points                        |
+| Clean Sheet        | +3 points                        |
+| Goal Scored        | +2 points per goal               |
+| Goals Conceded     | -1 point per goal                |
 
-Top Scorer (Golden Boot): +10 points (if a player from your team wins)
-Best Player (Golden Ball): +8 points (if a player from your team wins)
-Best Goalkeeper: +8 points (if a player from your team wins)
-Team of the Tournament Selection: +2 points per player selected from your teams
+## Player Achievements
 
-Fair Play:
+| Award                     | Points                         |
+| ------------------------- | ------------------------------ |
+| Top Scorer (Golden Boot)  | +10 points (if a player wins)  |
+| Best Player (Golden Ball) | +8 points (if a player wins)   |
+| Best Goalkeeper           | +8 points (if a player wins)   |
+| Team of the Tournament    | +2 points per player selected  |
 
-Yellow Card Awarded: -0.25 points
-Red Card Awarded: -1 points
-Fair Play Award for the Tournament: +5 points (if your team wins)
+## Fair Play
 
-Miscellaneous:
+| Action                    | Points                         |
+| ------------------------- | ------------------------------ |
+| Yellow Card Awarded       | -0.25 points                   |
+| Red Card Awarded          | -1 points                      |
+| Fair Play Award           | +5 points (if your team wins)  |
 
-Hat-trick by a player: +5 points
-Penalty Save (goalkeeper): +3 points
-Own Goal: -3 points
+## Miscellaneous
 
-Example Scoring Calculation:
-If one of your teams wins a group stage match 2-0:
+| Action          | Points       |
+| --------------- | ------------ |
+| Hat-trick       | +5 points    |
+| Own Goal        | -3 points    |
 
-Win: +3 points
-Clean Sheet: +2 points
-Goals Scored: +2 points (1 per goal)
-Total for this match: 7 points
+## Example Scoring Calculation
 
-If the same team advances to the Quarterfinals:
+**Scenario:** If one of your teams wins a group stage match 2-0:
 
-Advance from Group Stage: +5 points
-Reach Quarterfinals: +7 points
-Total for advancement: 12 points
+- **Win:** +3 points
+- **Clean Sheet:** +2 points
+- **Goals Scored:** +2 points (1 per goal)
+- **Total for this match:** 7 points
 
-If a player from your team wins the Golden Boot:
+**Advancement:**
 
-Top Scorer: 10 points
+- **Advance from Group Stage:** +5 points
+- **Reach Quarterfinals:** +7 points
+- **Total for advancement:** 12 points
 
+**Player Award:**
+
+- **Top Scorer:** 10 points (if a player from your team wins)
 
 This scoring system encourages participants to stay engaged throughout the tournament, as points can be accumulated through various achievements and not just by having the team that wins the tournament.
 
