@@ -34,8 +34,7 @@
 
 | Action             | Points                           |
 | ------------------ | -------------------------------- |
-| Win                | +5 points                        |
-| Draw               | +2 points (extra time)           |
+| Win within normal or extra time             | +5 points                        |
 | Win on Penalties   | +3 points                        |
 | Clean Sheet        | +3 points                        |
 | Goal Scored        | +2 points per goal               |
