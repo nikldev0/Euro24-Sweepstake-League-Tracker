@@ -4,40 +4,39 @@ import pandas as pd
 
 def extract_team_names(fixtures):
 
-        # Extract team names and create a DataFrame
-        # Initialize an empty set to store unique team names
-        team_names = set()
+    # Extract team names and create a DataFrame
+    # Initialize an empty set to store unique team names
+    team_names = set()
 
-        # Iterate over each fixture in the response
-        for fixture in fixtures:
-            # Skip fixtures from qualifying rounds
-            if "Qualifying" in fixture['league']['round']:
-                continue
-            
-            home_team = fixture['teams']['home']['name']
-            away_team = fixture['teams']['away']['name']
-            
-            # Add the team names to the set (sets automatically handle deduplication)
-            team_names.add(home_team)
-            team_names.add(away_team)
-
-        # Convert the set to a list and sort it
-        unique_team_names = sorted(list(team_names))
-
-
-        if unique_team_names:
-            return pd.DataFrame(unique_team_names, columns=['Team Names'])
-        else:
-            print("No team names found")
-            return pd.DataFrame(columns=['Team Names'])
+    # Iterate over each fixture in the response
+    for fixture in fixtures:
+        # Skip fixtures from qualifying rounds
+        if "Qualifying" in fixture['league']['round']:
+            continue
         
-
+        home_team = fixture['teams']['home']['name']
+        away_team = fixture['teams']['away']['name']
         
-def process_card_events(api_client, fixture_id, home_team_id, away_team_id):
+        # Add the team names to the set (sets automatically handle deduplication)
+        team_names.add(home_team)
+        team_names.add(away_team)
 
+    # Convert the set to a list and sort it
+    unique_team_names = sorted(list(team_names))
+
+    if unique_team_names:
+        return pd.DataFrame(unique_team_names, columns=['Team Names'])
+    else:
+        print("No team names found")
+        return pd.DataFrame(columns=['Team Names'])
+        
+        
+def get_fixture_events(api_client, fixture_id):
     response = api_client.get(f"fixtures/events?fixture={fixture_id}")
-    events = response.get('response', [])
-    
+    return response.get('response', [])
+        
+
+def process_card_events(events, home_team_id, away_team_id):
     home_yellow_cards = 0
     home_red_cards = 0
     away_yellow_cards = 0
@@ -59,16 +58,8 @@ def process_card_events(api_client, fixture_id, home_team_id, away_team_id):
     return home_yellow_cards, home_red_cards, away_yellow_cards, away_red_cards
 
 
-def process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id):
-    fixture_response = api_client.get(f"fixtures?id={fixture_id}")
-    fixture = fixture_response.get('response', [])[0]
-    
-    if fixture['fixture']['status']['long'] == "Not Started":
-        return 0, 0
 
-    response = api_client.get(f"fixtures/events?fixture={fixture_id}")
-    events = response.get('response', [])
-    
+def process_hat_trick_events(events, home_team_id, away_team_id):
     home_goals = {}
     away_goals = {}
     home_hat_tricks = 0
@@ -98,18 +89,8 @@ def process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id)
 
     return home_hat_tricks, away_hat_tricks
 
-
         
-def process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id):
-    fixture_response = api_client.get(f"fixtures?id={fixture_id}")
-    fixture = fixture_response.get('response', [])[0]
-    
-    if fixture['fixture']['status']['long'] == "Not Started":
-        return 0, 0
-
-    response = api_client.get(f"fixtures/events?fixture={fixture_id}")
-    events = response.get('response', [])
-    
+def process_own_goal_events(events, home_team_id, away_team_id):
     home_own_goals = 0
     away_own_goals = 0
     
@@ -134,6 +115,8 @@ def process_group_fixtures(api_client, fixtures, group_name):
             home_team_id = fixture['teams']['home']['id']
             away_team_id = fixture['teams']['away']['id']
             
+            events = get_fixture_events(api_client, fixture_id)
+            
             if fixture['fixture']['status']['long'] == "Not Started":
                 # If the match has not started, only add the fixture ID, home, and away team names
                 fixtures_data.append([
@@ -154,13 +137,13 @@ def process_group_fixtures(api_client, fixtures, group_name):
                     result = f"{away_team} Victory"
                 
                 # Fetch the fixture events for cards
-                home_yellow_cards, home_red_cards, away_yellow_cards, away_red_cards = process_card_events(api_client, fixture_id, home_team_id, away_team_id)
+                home_yellow_cards, home_red_cards, away_yellow_cards, away_red_cards = process_card_events(events, home_team_id, away_team_id)
                 
                 # Fetch the hat trick events
-                home_hat_tricks, away_hat_tricks = process_hat_trick_events(api_client, fixture_id, home_team_id, away_team_id)
+                home_hat_tricks, away_hat_tricks = process_hat_trick_events(events, home_team_id, away_team_id)
                 
                 # Fetch the own goal events
-                home_own_goals, away_own_goals = process_own_goal_events(api_client, fixture_id, home_team_id, away_team_id)
+                home_own_goals, away_own_goals = process_own_goal_events(events, home_team_id, away_team_id)
                 
                 fixtures_data.append([
                     fixture_id,
@@ -193,3 +176,4 @@ def process_group_fixtures(api_client, fixtures, group_name):
     else:
         print(f"No fixtures found for {group_name}")
         return pd.DataFrame(columns=columns)
+    

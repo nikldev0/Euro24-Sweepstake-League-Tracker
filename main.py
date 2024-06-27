@@ -34,14 +34,14 @@ def main():
         sheet = initialize_google_sheets("Euro 24 Sweepstake League Tracker", "Team Names")
         
         # Update Google Sheet with DataFrame
-        update_google_sheet(sheet, team_names_df)
+        # update_google_sheet(sheet, team_names_df)
 
-        update_sheet_with_group_data(api_client, response, "Group A", "Group A")
-        update_sheet_with_group_data(api_client, response, "Group B", "Group B")
-        update_sheet_with_group_data(api_client, response, "Group C", "Group C")
-        update_sheet_with_group_data(api_client, response, "Group D", "Group D")
-        # update_sheet_with_group_data(response, "Group E", "Group E")
-        # update_sheet_with_group_data(response, "Group F", "Group F")
+        # update_sheet_with_group_data(api_client, response, "Group A", "Group A")
+        # update_sheet_with_group_data(api_client, response, "Group B", "Group B")
+        # update_sheet_with_group_data(api_client, response, "Group C", "Group C")
+        # update_sheet_with_group_data(api_client, response, "Group D", "Group D")
+        update_sheet_with_group_data(api_client, response, "Group E", "Group E")
+        update_sheet_with_group_data(api_client, response, "Group F", "Group F")
 
     except Exception as e:
         print(f"An error occurred: {e}")
